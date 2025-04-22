@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 #
 # Generate or verify checksums for many files.
-# Default algo: sha256.  Other supported: md5, sha1. 
+# Default algo: sha256.  Other supported: md5, sha1.
 
 source ./lib/utils.sh
 
 show_help() {
-  echo "Usage:"
+  echo "Usage: "
   echo "  shellman checksum_files [options]"
   echo ""
   echo "Description:"

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # Remove unwanted / temporary files from a tree.
-# Supports dry‑run preview and age filter. 
+# Supports dry‑run preview and age filter.
 
 source ./lib/utils.sh
 

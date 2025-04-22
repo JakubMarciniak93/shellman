@@ -1,0 +1,46 @@
+name: Check Shell Script Line Endings
+
+on:
+  pull_request:
+  push:
+
+jobs:
+  check_crlf_in_sh:
+    name: Check for CRLF in .sh files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code (with original line endings)
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Create .gitattributes to enforce LF
+        run: |
+          echo "*.sh text eol=lf" > .gitattributes
+
+      - name: Check for CRLF in .sh files
+        shell: bash
+        run: |
+          echo "🔍 Scanning all *.sh files for CRLF endings..."
+
+          mapfile -t all_sh_files < <(find . -type f -name "*.sh")
+
+          bad_files=()
+
+          for file in "${all_sh_files[@]}"; do
+            if grep -q $'\r' "$file"; then
+              bad_files+=("$file")
+            fi
+          done
+
+          if (( ${#bad_files[@]} > 0 )); then
+            echo "🚫 Found ${#bad_files[@]} shell script(s) with CRLF endings:"
+            for f in "${bad_files[@]}"; do
+              echo " • $f"
+            done
+            echo ""
+            echo "💡 Convert them using: dos2unix <file> or shellman line_endings --file <file> --to lf"
+            exit 1
+          else
+            echo "✅ All .sh files use proper LF endings."
+          fi
