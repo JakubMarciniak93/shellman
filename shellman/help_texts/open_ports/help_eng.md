@@ -1,31 +1,49 @@
-🔌 **open_ports – List Active TCP/UDP and Serial Ports**
+# 🔌 open_ports – TCP/UDP and Serial Port Viewer
 
-Show which local TCP/UDP ports are currently open (with process/PID/state),  
-**plus (optionally) all physical serial/parallel ports** (COM, LPT, tty, cu).
+The `open_ports` command shows currently active local TCP/UDP connections with process information.
 
----
-
-### 🔧 Options
-
-| option         | description |
-|----------------|-------------|
-| `--proto tcp/udp` | Filter by protocol |
-| `--port N`        | Filter by local port number |
-| `--json`          | Output raw JSON (TCP/UDP only) |
-| `--serial`        | List serial/parallel ports (COMx, LPTx, ttyUSB, ttyACM, cu.* etc.) |
-| `--lang-help`     | Show help (`pl` / `eng`) |
+It can also list physical serial and parallel ports, such as `COM`, `LPT`, `/dev/ttyUSB*`, `/dev/ttyACM*`, `/dev/ttyS*`, `/dev/cu.*`, and similar devices.
 
 ---
 
-### 📦 Examples
+## 🔧 Options
 
-All open network ports:
+| Option                             | Description                                                  |
+| ---------------------------------- | ------------------------------------------------------------ |
+| `--proto tcp/udp`, `-pro tcp/udp`  | Filter network connections by protocol                       |
+| `--port N`, `-p N`                 | Filter network connections by local port number              |
+| `--json`, `-j`                     | Output results as JSON                                       |
+| `--serial`, `-s`                   | List physical serial/parallel ports instead of TCP/UDP ports |
+| `--lang-help pl/eng`, `-lh pl/eng` | Show localized extended help                                 |
+
+---
+
+## 📦 Examples
+
+Show all active TCP/UDP connections:
 shellman open_ports
 
-All serial and parallel ports:
-shellman open_ports --serial
+Show only TCP connections:
+shellman open_ports --proto tcp
 
-Only UDP on port 53:
+Show only UDP connections on port 53:
 shellman open_ports --proto udp --port 53
 
-Requires pyserial for best serial port detection (on Windows).
+Show network connections as JSON:
+shellman open_ports --json
+
+List serial and parallel ports:
+shellman open_ports --serial
+
+List serial and parallel ports as JSON:
+shellman open_ports --serial --json
+
+Show Polish help:
+shellman open_ports --lang-help pl
+
+---
+
+## 🧩 Notes
+For network connections, Shellman uses `psutil`.
+For serial port detection, Shellman uses `pyserial`.
+Both dependencies should be installed automatically when Shellman is installed from the project configuration.

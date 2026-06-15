@@ -1,31 +1,51 @@
-🔌 **open_ports – Lista aktywnych portów TCP/UDP i portów szeregowych**
+# 🔌 open_ports – Podgląd portów TCP/UDP i portów szeregowych
 
-Wyświetla otwarte porty TCP/UDP (proces, PID, stan),  
-**a dodatkowo (na żądanie) wszystkie fizyczne porty szeregowe i równoległe** (COM, LPT, tty, cu).
+Komenda `open_ports` pokazuje aktualnie aktywne lokalne połączenia TCP/UDP razem z informacjami o procesie, PID, adresie lokalnym, adresie zdalnym i stanie połączenia.
 
----
-
-### 🔧 Opcje
-
-| opcja           | opis |
-|-----------------|------|
-| `--proto tcp/udp` | Filtruj po protokole |
-| `--port N`        | Filtruj po porcie lokalnym |
-| `--json`          | Surowy JSON (tylko TCP/UDP) |
-| `--serial`        | Wypisz porty szeregowe/równoległe (COMx, LPTx, ttyUSB, ttyACM, cu.* itp.) |
-| `--lang-help`     | Pokaż pomoc (pl / eng) |
+Może też wyświetlać fizyczne porty szeregowe i równoległe, takie jak `COM`, `LPT`, `/dev/ttyUSB*`, `/dev/ttyACM*`, `/dev/ttyS*`, `/dev/cu.*` i podobne urządzenia.
 
 ---
 
-### 📦 Przykłady
+## 🔧 Opcje
 
-Wszystkie otwarte porty sieciowe:
+| Opcja                              | Opis                                                                |
+| ---------------------------------- | ------------------------------------------------------------------- |
+| `--proto tcp/udp`, `-pro tcp/udp`  | Filtruje połączenia sieciowe według protokołu                       |
+| `--port N`, `-p N`                 | Filtruje połączenia sieciowe według lokalnego numeru portu          |
+| `--json`, `-j`                     | Wyświetla wynik w formacie JSON                                     |
+| `--serial`, `-s`                   | Pokazuje fizyczne porty szeregowe/równoległe zamiast portów TCP/UDP |
+| `--lang-help pl/eng`, `-lh pl/eng` | Wyświetla rozszerzoną pomoc językową                                |
+
+---
+
+## 📦 Przykłady
+
+Pokaż wszystkie aktywne połączenia TCP/UDP:
 shellman open_ports
 
-Wszystkie porty szeregowe i równoległe:
-shellman open_ports --serial
+Pokaż tylko połączenia TCP:
+shellman open_ports --proto tcp
 
-Tylko UDP na porcie 53:
+Pokaż tylko połączenia UDP na porcie 53:
 shellman open_ports --proto udp --port 53
 
-Wymaga pyserial do najlepszej detekcji portów (Windows).
+Pokaż połączenia sieciowe w formacie JSON:
+shellman open_ports --json
+
+Wyświetl porty szeregowe i równoległe:
+shellman open_ports --serial
+
+Wyświetl porty szeregowe i równoległe w formacie JSON:
+shellman open_ports --serial --json
+
+
+Wyświetl pomoc po angielsku:
+shellman open_ports --lang-help eng
+
+---
+
+## 🧩 Uwagi
+
+Do odczytu połączeń sieciowych Shellman używa biblioteki `psutil`.
+Do wykrywania portów szeregowych Shellman używa biblioteki `pyserial`.
+Obie zależności powinny zostać zainstalowane automatycznie podczas instalacji Shellmana na podstawie konfiguracji projektu.
