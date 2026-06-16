@@ -10,13 +10,16 @@ from typing import Deque
 import click
 
 ALERT_PATTERN = re.compile(
-    r"(?i)\b(?:bug|error|failed|fail|failure|fatal|exception|traceback|panic|critical|segfault)\b"
+    r"(?i)\b(?:AssertionError|bug|error|failed|fail|failure|fatal|exception|traceback|panic|critical|segfault)\b"
 )
 
 INFO_PATTERN = re.compile(
     r"(?i)\b(?:Step|)\b"
 )
 
+SPECIAL_PATTERN = re.compile(
+    r"(?i)\b(?:Device_category|Configuration_of_Device_category)\b"
+)
 
 def _timestamp_now() -> str:
     """Return the current local timestamp for file markers."""
@@ -54,6 +57,15 @@ def _echo_text(text: str, *, is_green: bool, nl: bool = True) -> None:
             _echo_plain(text[last_end:start], is_green=is_green)
 
         click.secho(match.group(0), fg="yellow", nl=False)
+        last_end = end
+
+    for match in SPECIAL_PATTERN.finditer(text):
+        start, end = match.span()
+
+        if start > last_end:
+            _echo_plain(text[last_end:start], is_green=is_green)
+
+        click.secho(match.group(0), fg="blue", nl=False)
         last_end = end
 
     if last_end < len(text):
